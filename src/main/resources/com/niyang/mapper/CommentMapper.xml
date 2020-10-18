@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.niyang.mapper.CommentMapper">
+  <resultMap id="BaseResultMap" type="com.niyang.domain.Comment">
+    <id column="id" jdbcType="INTEGER" property="id"/>
+    <result column="news_id" jdbcType="INTEGER" property="newsId"/>
+    <result column="content" jdbcType="LONGVARCHAR" property="content"/>
+    <result column="user_id" jdbcType="INTEGER" property="userId"/>
+    <result column="commit_time" jdbcType="TIMESTAMP" property="commitTime"/>
+    <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, news_id, content, user_id, commit_time,user_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from comment
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from comment
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.niyang.domain.Comment"
+          useGeneratedKeys="true">
+    insert into comment (news_id, content, user_id,
+    commit_time,user_name)
+    values (#{newsId,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR}, #{userId,jdbcType=INTEGER},
+    #{commitTime,jdbcType=TIMESTAMP}, #{userName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id"
+          parameterType="com.niyang.domain.Comment" useGeneratedKeys="true">
+    insert into comment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="newsId != null">
+        news_id,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="commitTime != null">
+        commit_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="newsId != null">
+        #{newsId,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="commitTime != null">
+        #{commitTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.niyang.domain.Comment">
+    <!--@mbg.generated-->
+    update comment
+    <set>
+      <if test="newsId != null">
+        news_id = #{newsId,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="commitTime != null">
+        commit_time = #{commitTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.niyang.domain.Comment">
+    update comment
+    set news_id = #{newsId,jdbcType=INTEGER},
+    content = #{content,jdbcType=LONGVARCHAR},
+    user_id = #{userId,jdbcType=INTEGER},
+    commit_time = #{commitTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="findByNewsId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from comment
+    where news_id=#{newsId}
+    order by commit_time desc
+  </select>
+</mapper>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.niyang.mapper.NewsMapper">
+  <resultMap id="BaseResultMap" type="com.niyang.domain.News">
+    <id column="id" jdbcType="INTEGER" property="id"/>
+    <result column="news_pic" jdbcType="VARCHAR" property="newsPic"/>
+    <result column="news_title" jdbcType="VARCHAR" property="newsTitle"/>
+    <result column="news_desc" jdbcType="VARCHAR" property="newsDesc"/>
+    <result column="news_content" jdbcType="LONGVARCHAR" property="newsContent"/>
+    <result column="news_category" jdbcType="VARCHAR" property="newsCategory"/>
+    <result column="cate_id" jdbcType="INTEGER" property="cateId"/>
+    <result column="news_share_url" jdbcType="LONGVARCHAR" property="newsShareUrl"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, news_pic, news_title, news_desc, news_content, news_category, cate_id,news_share_url
+  </sql>
+  <select id="findByPage" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM news
+    where cate_id = #{cateId}
+    order by id desc
+  </select>
+  <select id="findById" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    FROM news
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from news
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.niyang.domain.News"
+          useGeneratedKeys="true">
+    insert into news (news_pic, news_title, news_desc,
+    news_content, news_category, cate_id,news_share_url
+    )
+    values (#{newsPic,jdbcType=VARCHAR}, #{newsTitle,jdbcType=VARCHAR},
+    #{newsDesc,jdbcType=VARCHAR},
+    #{newsContent,jdbcType=LONGVARCHAR}, #{newsCategory,jdbcType=VARCHAR},
+    #{cateId,jdbcType=INTEGER},#{newsShareUrl}
+    )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.niyang.domain.News">
+    update news
+    set news_pic = #{newsPic,jdbcType=VARCHAR},
+    news_title = #{newsTitle,jdbcType=VARCHAR},
+    news_desc = #{newsDesc,jdbcType=VARCHAR},
+    news_content = #{newsContent,jdbcType=LONGVARCHAR},
+    news_category = #{newsCategory,jdbcType=VARCHAR},
+    cate_id = #{cateId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

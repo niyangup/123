@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.niyang.mapper.CollectionMapper">
+  <resultMap id="BaseResultMap" type="com.niyang.domain.Collection">
+    <id column="id" jdbcType="INTEGER" property="id"/>
+    <result column="user_id" jdbcType="INTEGER" property="userId"/>
+    <result column="news_id" jdbcType="INTEGER" property="newsId"/>
+  </resultMap>
+  <resultMap id="BaseResultMap2" type="com.niyang.domain.News">
+    <id column="news_id" jdbcType="INTEGER" property="id"/>
+    <result column="news_pic" jdbcType="VARCHAR" property="newsPic"/>
+    <result column="news_title" jdbcType="VARCHAR" property="newsTitle"/>
+    <result column="news_desc" jdbcType="VARCHAR" property="newsDesc"/>
+    <result column="news_content" jdbcType="LONGVARCHAR" property="newsContent"/>
+    <result column="news_category" jdbcType="VARCHAR" property="newsCategory"/>
+    <result column="cate_id" jdbcType="INTEGER" property="cateId"/>
+    <result column="news_share_url" jdbcType="LONGVARCHAR" property="newsShareUrl"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_id, news_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from collection
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from collection
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.niyang.domain.Collection"
+          useGeneratedKeys="true">
+    insert into collection (user_id, news_id)
+    values (#{userId,jdbcType=INTEGER}, #{newsId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id"
+          parameterType="com.niyang.domain.Collection" useGeneratedKeys="true">
+    insert into collection
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="newsId != null">
+        news_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="newsId != null">
+        #{newsId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.niyang.domain.Collection">
+    update collection
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="newsId != null">
+        news_id = #{newsId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.niyang.domain.Collection">
+    update collection
+    set user_id = #{userId,jdbcType=INTEGER},
+    news_id = #{newsId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="checkCollected" resultType="int">
+    select
+    count(*)
+    from collection
+    where user_id=#{userId}
+    and news_id=#{newsId}
+  </select>
+  <select id="listByUserId" resultMap="BaseResultMap2">
+    SELECT *
+    FROM collection,news
+    WHERE user_id = #{userId}
+    AND collection.news_id = news.id
+  </select>
+  <delete id="deleteCollected">
+    delete
+    from collection
+    where user_id=#{userId}
+    and news_id=#{newsId}
+  </delete>
+  <insert id="insertCollected">
+    insert into
+    collection (user_id, news_id)
+    values (#{userId}, #{newsId})
+  </insert>
+</mapper>

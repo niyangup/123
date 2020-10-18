@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.niyang.mapper.VersionMapper">
+  <resultMap id="BaseResultMap" type="com.niyang.domain.Version">
+    <id column="id" jdbcType="INTEGER" property="id"/>
+    <result column="apk_num" jdbcType="VARCHAR" property="apkNum"/>
+    <result column="apk_desc" jdbcType="VARCHAR" property="apkDesc"/>
+    <result column="apk_url" jdbcType="VARCHAR" property="apkUrl"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, apk_num, apk_desc, apk_url
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from version
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from version
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.niyang.domain.Version"
+          useGeneratedKeys="true">
+    insert into version (apk_num, apk_desc, apk_url
+    )
+    values (#{apkNum,jdbcType=VARCHAR}, #{apkDesc,jdbcType=VARCHAR}, #{apkUrl,jdbcType=VARCHAR}
+    )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id"
+          parameterType="com.niyang.domain.Version" useGeneratedKeys="true">
+    insert into version
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="apkNum != null">
+        apk_num,
+      </if>
+      <if test="apkDesc != null">
+        apk_desc,
+      </if>
+      <if test="apkUrl != null">
+        apk_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="apkNum != null">
+        #{apkNum,jdbcType=VARCHAR},
+      </if>
+      <if test="apkDesc != null">
+        #{apkDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="apkUrl != null">
+        #{apkUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.niyang.domain.Version">
+    update version
+    <set>
+      <if test="apkNum != null">
+        apk_num = #{apkNum,jdbcType=VARCHAR},
+      </if>
+      <if test="apkDesc != null">
+        apk_desc = #{apkDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="apkUrl != null">
+        apk_url = #{apkUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.niyang.domain.Version">
+    update version
+    set apk_num = #{apkNum,jdbcType=VARCHAR},
+    apk_desc = #{apkDesc,jdbcType=VARCHAR},
+    apk_url = #{apkUrl,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="finAll" resultMap="BaseResultMap">
+    select * from version
+  </select>
+  <select id="getLastestVersion" resultMap="BaseResultMap">
+    SELECT * FROM `version` ORDER BY id desc
+  </select>
+</mapper>
